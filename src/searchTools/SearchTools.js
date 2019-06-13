@@ -11,7 +11,7 @@ class SearchTools extends React.Component{
 
             <div className="searchTools">
                 
-                <SearchBar updateSearchTerm={this.props.updateSearchTerm}/>
+                <SearchBar updateSearchTerm={this.props.updateSearchTerm} getBooks={this.props.getBooks}/>
                 <FilterOptions handlePrintType={this.props.handlePrintType} handleBookType={this.props.handleBookType}/>
             
             </div> 

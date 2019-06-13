@@ -21,7 +21,7 @@ class App extends React.Component{
 
   updateSearchTerm(e){
     console.log(e);
-    e.preventDefault();
+    
     this.setState({
 
       searchTerm: e.target.value
@@ -51,7 +51,8 @@ class App extends React.Component{
 
 
 
-  componentDidMount(){
+  getBooks(){
+    
     console.log(this.state.searchTerm);
     const url = `https://www.googleapis.com/books/v1/volumes?q=${this.state.searchTerm}&maxResults=40&key=AIzaSyD3zsfyGfYi8nJcdJva2ceV-6clAQhXEnw`;
 
@@ -89,7 +90,7 @@ class App extends React.Component{
     return (
       <main className='App'>
         <h1 className="header">Google Book Search</h1>
-        <SearchTools updateSearchTerm={(e)=> this.updateSearchTerm(e)} handlePrintType={value=> this.handlePrintType(value)} handleBookType={value=> this.handleBookType(value)}/>
+        <SearchTools updateSearchTerm={(e)=> this.updateSearchTerm(e)} handlePrintType={value=> this.handlePrintType(value)} handleBookType={value=> this.handleBookType(value)} getBooks={e => this.getBooks(e)}/>
         <FilterableList booksList={this.state.booksList} printType={this.state.printTypeFilter} bookType={this.state.bookTypeFilter}/>
         
       </main>
