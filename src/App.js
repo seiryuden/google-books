@@ -1,26 +1,102 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import SearchTools from "./searchTools/SearchTools";
+import FilterableList from "./filterableList/FilterableList";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component{
+  
+  constructor(props){
+
+    super(props);
+    this.state = {
+      searchTerm: "cooking",
+      booksList: [],
+      printTypeFilter: "",
+      bookTypeFilter: ""
+      
+    }
+
+
+  }
+
+  updateSearchTerm(e){
+    console.log(e);
+    e.preventDefault();
+    this.setState({
+
+      searchTerm: e.target.value
+
+    })
+
+
+  }
+
+  handlePrintType(value){
+
+    this.setState({
+      printTypeFilter: `${value}`
+    })
+    
+  }
+
+  handleBookType(value){
+
+    this.setState({
+
+      bookTypeFilter: `${value}`
+
+    })
+
+  }
+
+
+
+  componentDidMount(){
+    console.log(this.state.searchTerm);
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${this.state.searchTerm}&maxResults=40&key=AIzaSyD3zsfyGfYi8nJcdJva2ceV-6clAQhXEnw`;
+
+    fetch(url)
+      .then(res => {
+
+        if(!res.ok){
+          throw new Error("Something went worng, please try again later.");
+        }
+        return res;
+      })
+      .then(res => res.json())
+      .then(data =>{
+        
+        this.setState({
+
+          booksList: data.items,
+          error: null
+
+        });
+        console.log(data.items)
+      }) 
+      .catch(err =>{
+        this.setState({ 
+          error: err.message
+        })
+      })
+  }
+
+  
+  render(){
+
+    console.log(this.state)
+    
+    return (
+      <main className='App'>
+        <h1 className="header">Google Book Search</h1>
+        <SearchTools updateSearchTerm={(e)=> this.updateSearchTerm(e)} handlePrintType={value=> this.handlePrintType(value)} handleBookType={value=> this.handleBookType(value)}/>
+        <FilterableList booksList={this.state.booksList} printType={this.state.printTypeFilter} bookType={this.state.bookTypeFilter}/>
+        
+      </main>
+    );
+      
+  }
+    
 }
 
 export default App;
